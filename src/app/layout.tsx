@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Casa21",
-  description: "A brazilian hackerspace powered by VinteUm",
+  description: "A brazilian hackerspace powered by Vinteum",
 };
 
 export default function RootLayout({
