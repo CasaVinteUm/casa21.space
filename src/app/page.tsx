@@ -33,7 +33,7 @@ export default function Home() {
           <Container className="relative">
             <div className="mx-auto max-w-2xl lg:max-w-4xl lg:px-12">
               <h1 className="font-display text-5xl font-bold tracking-tighter text-green-600 sm:text-7xl">
-                <span className="sr-only">Casa21 - </span>A brazilian hackerspace powered by <a href="https://vinteum.org/" target="_blank">VinteUm</a>
+                <span className="sr-only">Casa21 - </span>A brazilian hackerspace powered by <a href="https://vinteum.org/" target="_blank" className="underline">Vinteum</a>.
               </h1>
               <div className="mt-6 space-y-6 font-display text-2xl tracking-tight text-green-900">
                 <p>
