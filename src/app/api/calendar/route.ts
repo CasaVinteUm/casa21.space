@@ -1,3 +1,5 @@
+import { useCache } from '@/lib/cache'
+
 export interface Event {
   id: string
   title: string
@@ -6,56 +8,71 @@ export interface Event {
   url: string | null
 }
 
-const REVALIDATE_EVERY_30_MINUTES = 30 * 60
+const CACHE_EXPIRE_IN_30_MINUTES = 30 * 60
+const CACHE_KEY = 'google:events'
 
 export async function GET() {
-  const endpoint = `https://www.googleapis.com/calendar/v3/calendars/${process.env.GOOGLE_CALENDAR_ID}/events`
+  const { client } = await useCache()
 
-  let eventsFromCalendar = []
+  const cachedEvents = await client.get(CACHE_KEY)
 
-  try {
-    const res = await fetch(endpoint, {
-      next: {
-        revalidate: REVALIDATE_EVERY_30_MINUTES
-      },
-      headers: {
-        "X-goog-api-key": `${process.env.GOOGLE_API_KEY}`
+  let events: Event[] = []
+
+  if (cachedEvents) {
+    events = JSON.parse(cachedEvents)
+  } else {
+    const endpoint = `https://www.googleapis.com/calendar/v3/calendars/${process.env.GOOGLE_CALENDAR_ID}/events`
+
+    let eventsFromCalendar = []
+
+    try {
+      const res = await fetch(endpoint, {
+        next: {
+          revalidate: 0
+        },
+        headers: {
+          "X-goog-api-key": `${process.env.GOOGLE_API_KEY}`
+        }
+      })
+
+      const { items } = await res.json()
+
+      if (Array.isArray(items)) {
+        eventsFromCalendar = items
       }
-    })
-
-    const { items } = await res.json()
-
-    if (Array.isArray(items)) {
-      eventsFromCalendar = items
+    } catch (error) {
+      return Response.error()
     }
-  } catch (error) {
-    return Response.error()
+
+    events = eventsFromCalendar
+      .filter((event) => {
+        return new Date(event.start.dateTime).getTime() >= new Date().getTime()
+      })
+      .sort((a, b) => {
+        return new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime()
+      }).map((event) => {
+        let meetupLink = null
+
+        if (event.iCalUID) {
+          const [meetupId] = event.iCalUID.replace('event_', '').split('@')
+          if (meetupId) {
+            meetupLink = `https://www.meetup.com/clubebitcoinsp/events/${meetupId}/`
+          }
+        }
+
+        return {
+          id: event.id,
+          title: event.summary,
+          start: event.start.dateTime,
+          end: event.end.dateTime,
+          url: meetupLink
+        }
+      })
+
+    await client.set(CACHE_KEY, JSON.stringify(events), { EX: CACHE_EXPIRE_IN_30_MINUTES })
   }
 
-  const events: Event[] = eventsFromCalendar
-    .filter((event) => {
-      return new Date(event.start.dateTime).getTime() >= new Date().getTime()
-    })
-    .sort((a, b) => {
-      return new Date(a.start.dateTime).getTime() - new Date(b.start.dateTime).getTime()
-    }).map((event) => {
-      let meetupLink = null
-
-      if (event.iCalUID) {
-        const [meetupId] = event.iCalUID.replace('event_', '').split('@')
-        if (meetupId) {
-          meetupLink = `https://www.meetup.com/clubebitcoinsp/events/${meetupId}/`
-        }
-      }
-
-      return {
-        id: event.id,
-        title: event.summary,
-        start: event.start.dateTime,
-        end: event.end.dateTime,
-        url: meetupLink
-      }
-    })
+  await client.disconnect()
 
   return Response.json({ events })
 }
