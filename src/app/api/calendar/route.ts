@@ -74,5 +74,11 @@ export async function GET() {
 
   await client.disconnect()
 
+  events = events.map((event) => ({
+    ...event,
+    start: new Date(event.start).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+    end: new Date(event.end).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+  }))
+
   return Response.json({ events })
 }
