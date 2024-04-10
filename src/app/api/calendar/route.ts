@@ -74,11 +74,15 @@ export async function GET() {
 
   await client.disconnect()
 
-  events = events.map((event) => ({
-    ...event,
-    start: new Date(event.start).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-    end: new Date(event.end).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
-  }))
+  events = events
+    .filter((event) => {
+      return new Date(event.start).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) >= new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+    })
+    .map((event) => ({
+      ...event,
+      start: new Date(event.start).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', timeStyle: 'short', dateStyle: 'short' }),
+      end: new Date(event.end).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', timeStyle: 'short', dateStyle: 'short' })
+    }))
 
   return Response.json({ events })
 }
