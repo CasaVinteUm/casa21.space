@@ -9,14 +9,14 @@ export function Coworking() {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:min-w-full lg:max-w-none lg:flex-none lg:gap-y-8">
           <div className="lg:col-end-1 lg:w-full lg:max-w-lg lg:pb-8">
             <h2 className="text-3xl font-bold tracking-tight text-green-600 sm:text-4xl">Coworking</h2>
-            <p className="mt-6 text-xl leading-8 text-green-900">Quasi est quaerat. Sit molestiae et. Provident ad dolorem occaecati eos iste. Soluta rerum quidem minus ut molestiae velit error quod. Excepturi quidem expedita molestias quas.</p>
-            <p className="mt-6 text-base leading-7 text-green-900">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat. Quasi aperiam sit non sit neque reprehenderit.</p>
+            <p className="mt-6 text-xl leading-8 text-green-900">No nosso espaço de coworking, oferecemos um ambiente inspirador e colaborativo para todas as pessoas que desejam contribuir para a construção do futuro do Bitcoin.</p>
+            <p className="mt-6 text-base leading-7 text-green-900">Proporcionamos não apenas um local de trabalho, mas também oportunidades de networking, eventos educscionais e recursos para impulsionar o crescimento e o sucesso dos nossos membros e da comunidade bitcoiner brasileira.</p>
             <div className="mt-10 flex">
               <Link
                 href="/coworking"
                 className="rounded-md bg-green-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               >
-                Get a Day Pass <ArrowRightIcon className="inline h-4 w-4 flex-none text-white" aria-hidden="true" />
+                Quero conhecer! <ArrowRightIcon className="inline h-4 w-4 flex-none text-white" aria-hidden="true" />
             </Link>
             </div>
           </div>

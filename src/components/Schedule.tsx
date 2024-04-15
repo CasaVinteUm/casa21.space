@@ -97,7 +97,7 @@ export function Schedule() {
               Agenda de eventos
             </h2>
             <p className="mt-4 font-display text-2xl tracking-tight text-green-900">
-              Learn from the experts on the cutting-edge of deception at the most sinister companies.
+            Fiquem ligados nos meetups, workshops e encontros que proporcionamos para todos os bitcoiners, dos iniciantes aos experientes shadowy super coders.
             </p>
           </div>
 
